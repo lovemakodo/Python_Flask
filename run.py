@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,url_for
 import pkgutil, os
 import importlib
 
@@ -15,3 +15,4 @@ def init_module(app):
 
 if __name__ == "__main__":
     init_module(app)
+    app.run(debug=True)

@@ -1,10 +1,16 @@
-from flask_restplus import Api
-from flask import Blueprint
+import os, sys
+import pkgutil, importlib
 
-blueprint = Blueprint("app", "app BP", url_prefix="/app")
-api = Api(blueprint, version="1.0", title="app", description="the app API")
 
 def init_module(app):
-    print("init app.init_module")
-    api.init_app(app)
+    path = os.path.dirname(__file__)
+    sys.path.append(path)
+    modules = pkgutil.iter_modules([path])
+    for module_raw in modules:
+        if module_raw.ispkg:
+            module = importlib.import_module(module_raw.name)
+            if "init_module" in dir(module):
+                module.init_module(app)
+    sys.path.pop()
+    print("app init Success!")
 
